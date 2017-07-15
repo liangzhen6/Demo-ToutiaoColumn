@@ -24,8 +24,12 @@
     self.editBtn.layer.cornerRadius = 15;
     self.editBtn.layer.borderWidth = 1;
     self.editBtn.layer.borderColor = [UIColor orangeColor].CGColor;
-//    back.frame = [UIScreen mainScreen].bounds;
     [self.view addSubview:back];
+    [back setBlock:^(BOOL isEdit){
+        if (isEdit) {
+            self.editBtn.selected = YES;
+        }
+    }];
     self.backView = back;
     // Do any additional setup after loading the view, typically from a nib.
 }

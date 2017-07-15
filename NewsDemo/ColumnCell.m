@@ -16,6 +16,17 @@
     // Initialization code
 }
 
+- (void)layoutSublayersOfLayer:(CALayer *)layer {
+    [super layoutSublayersOfLayer:layer];
+    /*
+     这里是突破的关键：一种思路，可以试试
+     1.发现是选中状态将layer放大
+     2.否则恢复原来的大小。
+     */
+    NSLog(@"heheh");
+
+}
+
 - (void)setModel:(ColumnModel *)model {
     _model = model;
     self.label.text = model.title;
@@ -41,6 +52,14 @@
             self.contentView.backgroundColor = [UIColor grayColor];
         }
             break;
+//        case 3:
+//        {//选中状态
+//            self.deleteBtn.hidden = NO;
+//            self.addBtn.hidden = YES;
+//            self.contentView.backgroundColor = [UIColor orangeColor];
+//
+//        }
+//            break;
             
         default:
             break;

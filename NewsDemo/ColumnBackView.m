@@ -12,7 +12,7 @@
 #import "ColumnModel.h"
 
 
-@interface ColumnBackView ()<UICollectionViewDelegate,UICollectionViewDataSource>
+@interface ColumnBackView ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property(nonatomic,strong)NSMutableArray * dataScore;
 
@@ -48,10 +48,7 @@ static NSString *const headerId = @"SectionHeaderView";
     
     UINib * headerNib = [UINib nibWithNibName:NSStringFromClass([SectionHeaderView class]) bundle:nil];
     [self.collectionView registerNib:headerNib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerId];
-    
 
-    
-//    [self.collectionView reloadData];
 }
 
 - (NSMutableArray *)dataScore {
@@ -80,36 +77,68 @@ static NSString *const headerId = @"SectionHeaderView";
 - (void)onLongPressed:(UILongPressGestureRecognizer *)sender {
     static NSIndexPath * selectIndexPath = nil;//长按拖动的那个item
     static NSIndexPath * movetoIndexPath = nil;//移动到的那个位置的item（将要被交换的位置）
+    static CGPoint offsetPoint;
+    
+    //    // 如果不是编辑状态，转变成编辑状态，并且通知上一个页面
+    if (!self.edit) {
+        self.edit = YES;
+        [self changeEditState:YES];
+        if (self.block) {
+            self.block(self.edit);
+        }
+    }
+    
     
     CGPoint point = [sender locationInView:sender.view];
     NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:point];
     // 只允许第一段而且不包含第一个可移动
     if (indexPath.section == 0 && indexPath.item != 0) {
         movetoIndexPath = indexPath;
+        
     }
+
 
     self.locationPoint = point;
 
     switch (sender.state) {
+            
         case UIGestureRecognizerStateBegan: {
+
             if (indexPath.section == 0 && indexPath.item != 0) {
                 selectIndexPath = indexPath;
+                ColumnCell * cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:selectIndexPath];
+//                ColumnModel * model = self.dataScore[0][selectIndexPath.item];
+//                model.state = itemStateSelect;
+//                [self.collectionView reloadItemsAtIndexPaths:@[selectIndexPath]];
+                
+                NSLog(@"%f--%f",cell.center.x,cell.center.y);
+                offsetPoint = CGPointMake(cell.center.x - point.x, cell.center.y - point.y);
                 [self.collectionView beginInteractiveMovementForItemAtIndexPath:indexPath];
+                [self.collectionView updateInteractiveMovementTargetPosition:cell.center];
+
             }
             break;
         }
         case UIGestureRecognizerStateChanged: {
             if (selectIndexPath) {//更新itme的位置
-                [self.collectionView updateInteractiveMovementTargetPosition:point];
+//                [self.collectionView updateInteractiveMovementTargetPosition:point];
+                [self.collectionView updateInteractiveMovementTargetPosition:CGPointMake(point.x + offsetPoint.x, point.y + offsetPoint.y)];
+
             }
             break;
         }
         case UIGestureRecognizerStateEnded: {
             if (selectIndexPath) {
+//                ColumnModel * model = self.dataScore[0][selectIndexPath.item];
+//                model.state = itemStateEdit;
+//                [self.collectionView reloadItemsAtIndexPaths:@[selectIndexPath]];
+                
                 [self.collectionView endInteractiveMovement];//停止移动
                 if (point.y>self.maxY) {//如果用户把选中的栏目拖到删除栏目的那一块区域
                     [self handleEndMoveSelectIndex:selectIndexPath movetoIndex:movetoIndexPath];
                 }
+
+
                 selectIndexPath = nil;
             }
             break;
@@ -119,6 +148,8 @@ static NSString *const headerId = @"SectionHeaderView";
             break;
         }
     }
+    
+  
 }
 
 /**
@@ -132,11 +163,13 @@ static NSString *const headerId = @"SectionHeaderView";
     ColumnModel * model = [self.dataScore[0] objectAtIndex:selectIndexPath.item];
     //                    NSLog(@"shabima%@",myIndexpath);
     model.state = itemStateRemove;
+    
     [self.dataScore[0] removeObjectAtIndex:selectIndexPath.item];
     [self.dataScore[1] insertObject:model atIndex:0];
+    
+    
     [self.collectionView moveItemAtIndexPath:movetoIndexPath toIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
-    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:1]]];
-
+    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]]];
 }
 
 
@@ -151,6 +184,8 @@ static NSString *const headerId = @"SectionHeaderView";
     }
     
     [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
+    
+    NSLog(@"%@",_dataScore);
 
 }
 
@@ -187,17 +222,16 @@ static NSString *const headerId = @"SectionHeaderView";
 - (void)handleCellAction:(ColumnModel *)model {
     if (model.state == itemStateEdit) {
         //是编辑状态，需要处理删除操作
-        NSInteger index = [self.dataScore[0] indexOfObject:model];
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:0];
-        [self handleEndMoveSelectIndex:indexPath movetoIndex:indexPath];
-        
+//        NSInteger index = [self.dataScore[0] indexOfObject:model];
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:0];
+//        [self handleEndMoveSelectIndex:indexPath movetoIndex:indexPath];
+        [self handleDeleteItemSelectIndex:model];
     }else if(model.state == itemStateRemove) {
         //是删除状态，需要处理为增加一个
         [self handelAddItemSelectIndex:model];
     }
 
 }
-
 
 - (void)handelAddItemSelectIndex:(ColumnModel *)selectModel {
     ColumnModel * model = selectModel;
@@ -209,13 +243,42 @@ static NSString *const headerId = @"SectionHeaderView";
     }else{
         model.state = itemStateNormol;
     }
+    
+    [self.collectionView reloadItemsAtIndexPaths:@[selectIndexPath]];
+    
     [self.dataScore[1] removeObjectAtIndex:selectIndexPath.item];
     [self.dataScore[0] addObject:model];
     [self.collectionView moveItemAtIndexPath:selectIndexPath toIndexPath:[NSIndexPath indexPathForItem:[self.dataScore[0] count]-1 inSection:0]];
-    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:[self.dataScore[0] count]-1 inSection:0]]];
+}
+
+- (void)handleDeleteItemSelectIndex:(ColumnModel *)selectModel {
+    ColumnModel * model = selectModel;
+    NSInteger index = [self.dataScore[0] indexOfObject:model];
+    NSIndexPath * selectIndexPath = [NSIndexPath indexPathForItem:index inSection:0];
+    
+    model.state = itemStateRemove;
+    
+    [self.collectionView reloadItemsAtIndexPaths:@[selectIndexPath]];//先刷新状态再移动。
+    
+    
+    [self.dataScore[0] removeObjectAtIndex:selectIndexPath.item];
+    [self.dataScore[1] insertObject:model atIndex:0];
+    
+    
+    [self.collectionView moveItemAtIndexPath:selectIndexPath toIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
 
 }
 
+#pragma mark ----------UICollectionViewDelegateFlowLayout-------------------
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+//    ColumnModel * model = self.dataScore[indexPath.section][indexPath.item];
+//    if (model.state == itemStateSelect) {
+//        return CGSizeMake(70, 32);
+//    }else{
+//        return CGSizeMake(68, 30);
+//    }
+//
+//}
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
     if (section==0) {//第一段隐藏段头
@@ -250,7 +313,9 @@ static NSString *const headerId = @"SectionHeaderView";
     
 }
 
-
+//- (CGPoint)collectionView:(UICollectionView *)collectionView targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset {
+//    return CGPointMake(0, 10);
+//}
 
 
 
@@ -288,7 +353,7 @@ static NSString *const headerId = @"SectionHeaderView";
 - (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
 //    NSLog(@"%@---%@",sourceIndexPath,destinationIndexPath);
     
-    if (self.locationPoint.y<self.maxY) {
+    if (self.locationPoint.y<=self.maxY) {
 //        [self.dataScore[0] exchangeObjectAtIndex:sourceIndexPath.item withObjectAtIndex:destinationIndexPath.item];
         NSString * change = self.dataScore[sourceIndexPath.section][sourceIndexPath.item];
         [self.dataScore[sourceIndexPath.section] removeObjectAtIndex:sourceIndexPath.item];

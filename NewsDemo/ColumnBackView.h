@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^editBlack)(BOOL isEdit);
+
 @interface ColumnBackView : UIView
+
+@property(nonatomic,copy)editBlack block;
 
 + (instancetype)columnBackView;
 
