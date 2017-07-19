@@ -12,6 +12,7 @@
 typedef void(^actionBlock)(ColumnModel *model);
 
 @interface ColumnCell : UICollectionViewCell
+@property (weak, nonatomic) IBOutlet UIView *backView;
 @property (weak, nonatomic) IBOutlet UILabel *label;
 
 @property(nonatomic,strong)ColumnModel * model;
@@ -19,5 +20,7 @@ typedef void(^actionBlock)(ColumnModel *model);
 @property (weak, nonatomic) IBOutlet UIButton *addBtn;
 
 @property(nonatomic,copy)actionBlock block;
+
+- (void)updateState:(BOOL)isSelect;
 
 @end

@@ -20,6 +20,8 @@
 @property(nonatomic,assign)CGFloat maxY;
 @property(nonatomic,getter=isEdit)BOOL edit;
 
+@property(nonatomic,assign)NSIndexPath * selectPath;
+
 @end
 
 static NSString *const cellId = @"ColumnCell";
@@ -78,6 +80,7 @@ static NSString *const headerId = @"SectionHeaderView";
     static NSIndexPath * selectIndexPath = nil;//长按拖动的那个item
     static NSIndexPath * movetoIndexPath = nil;//移动到的那个位置的item（将要被交换的位置）
     static CGPoint offsetPoint;
+//    static ColumnCell * mycell = nil;
     
     //    // 如果不是编辑状态，转变成编辑状态，并且通知上一个页面
     if (!self.edit) {
@@ -94,6 +97,7 @@ static NSString *const headerId = @"SectionHeaderView";
     // 只允许第一段而且不包含第一个可移动
     if (indexPath.section == 0 && indexPath.item != 0) {
         movetoIndexPath = indexPath;
+        NSLog(@"caomnima---%@",movetoIndexPath);
         
     }
 
@@ -107,10 +111,15 @@ static NSString *const headerId = @"SectionHeaderView";
             if (indexPath.section == 0 && indexPath.item != 0) {
                 selectIndexPath = indexPath;
                 ColumnCell * cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:selectIndexPath];
-//                ColumnModel * model = self.dataScore[0][selectIndexPath.item];
-//                model.state = itemStateSelect;
-//                [self.collectionView reloadItemsAtIndexPaths:@[selectIndexPath]];
-                
+
+//                mycell = cell;
+                ColumnModel * model = self.dataScore[0][selectIndexPath.item];
+                model.state = itemStateSelect;
+                [self.collectionView reloadItemsAtIndexPaths:@[selectIndexPath]];
+//                [self.collectionView performBatchUpdates:^{
+//                    [cell updateState:YES];
+//                } completion:nil];
+
                 NSLog(@"%f--%f",cell.center.x,cell.center.y);
                 offsetPoint = CGPointMake(cell.center.x - point.x, cell.center.y - point.y);
                 [self.collectionView beginInteractiveMovementForItemAtIndexPath:indexPath];
@@ -129,13 +138,30 @@ static NSString *const headerId = @"SectionHeaderView";
         }
         case UIGestureRecognizerStateEnded: {
             if (selectIndexPath) {
+                [self.collectionView endInteractiveMovement];//停止移动
+
 //                ColumnModel * model = self.dataScore[0][selectIndexPath.item];
 //                model.state = itemStateEdit;
 //                [self.collectionView reloadItemsAtIndexPaths:@[selectIndexPath]];
+//                if (mycell) {
+//                    NSIndexPath * indexPath = [self.collectionView indexPathForCell:mycell];
+//                    ColumnModel * model = self.dataScore[0][indexPath.item];
+//                    model.state = itemStateEdit;
+//                    [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+//
+//                }
+//                
                 
-                [self.collectionView endInteractiveMovement];//停止移动
+                
                 if (point.y>self.maxY) {//如果用户把选中的栏目拖到删除栏目的那一块区域
                     [self handleEndMoveSelectIndex:selectIndexPath movetoIndex:movetoIndexPath];
+                }else{
+                    if (self.selectPath) {
+                        ColumnModel * model = self.dataScore[0][self.selectPath.item];
+                        model.state = itemStateEdit;
+                        [self.collectionView reloadItemsAtIndexPaths:@[self.selectPath]];
+                        self.selectPath = nil;
+                    }
                 }
 
 
@@ -202,11 +228,7 @@ static NSString *const headerId = @"SectionHeaderView";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ColumnCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:indexPath];
-//    if (indexPath.section==1) {
-//        cell.backgroundColor = [UIColor redColor];
-//    }else{
-//        cell.backgroundColor = [UIColor yellowColor];
-//    }
+
     cell.model = self.dataScore[indexPath.section][indexPath.item];
     if (indexPath.section == 0 && indexPath.item == 0) {
         cell.deleteBtn.hidden = YES;
@@ -279,6 +301,30 @@ static NSString *const headerId = @"SectionHeaderView";
 //    }
 //
 //}
+//- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+//    return YES;
+//}
+//- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+//
+//}
+//- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+//
+//}
+//- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+//    return YES;
+//}
+//- (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+//    return YES;
+//}
+//- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+//
+//}
+//- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+//
+//}
+//
+//
+
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
     if (section==0) {//第一段隐藏段头
@@ -300,14 +346,16 @@ static NSString *const headerId = @"SectionHeaderView";
 
 
 - (NSIndexPath *)collectionView:(UICollectionView *)collectionView targetIndexPathForMoveFromItemAtIndexPath:(NSIndexPath *)originalIndexPath toProposedIndexPath:(NSIndexPath *)proposedIndexPath {
-//    NSLog(@"%@---%@",originalIndexPath,proposedIndexPath);
+    NSLog(@"%@---%@",originalIndexPath,proposedIndexPath);
     if (proposedIndexPath.section==0 && proposedIndexPath.item!=0) {
+        self.selectPath = proposedIndexPath;
         return proposedIndexPath;
     }else{
 //        if (proposedIndexPath.section==1) {
 //            NSIndexPath * path = [NSIndexPath indexPathForItem:[self.dataScore[0] count] -1 inSection:0];
 //            return path;
 //        }
+//        self.selectPath = nil;
         return originalIndexPath;
     }
     
@@ -325,7 +373,6 @@ static NSString *const headerId = @"SectionHeaderView";
 //    return proposedContentOffset;
 //
 //}
-
 
 
 
@@ -355,9 +402,11 @@ static NSString *const headerId = @"SectionHeaderView";
     
     if (self.locationPoint.y<=self.maxY) {
 //        [self.dataScore[0] exchangeObjectAtIndex:sourceIndexPath.item withObjectAtIndex:destinationIndexPath.item];
-        NSString * change = self.dataScore[sourceIndexPath.section][sourceIndexPath.item];
+        ColumnModel * change = self.dataScore[sourceIndexPath.section][sourceIndexPath.item];
         [self.dataScore[sourceIndexPath.section] removeObjectAtIndex:sourceIndexPath.item];
         [self.dataScore[destinationIndexPath.section] insertObject:change atIndex:destinationIndexPath.item];
+        
+
         
 //        NSLog(@"%@",_dataScore[0]);
     }

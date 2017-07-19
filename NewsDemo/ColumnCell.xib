@@ -11,59 +11,70 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ColumnCell" id="gTV-IL-0wX" customClass="ColumnCell">
-            <rect key="frame" x="0.0" y="0.0" width="67.5" height="30"/>
+            <rect key="frame" x="0.0" y="0.0" width="126" height="93"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="67.5" height="30"/>
+                <rect key="frame" x="0.0" y="0.0" width="126" height="93"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0RV-kc-WYb">
-                        <rect key="frame" x="0.0" y="0.0" width="67.5" height="30"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e7m-eE-NzS">
+                        <rect key="frame" x="0.0" y="0.0" width="126" height="93"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yz8-4K-AOJ">
+                                <rect key="frame" x="0.0" y="0.0" width="126" height="93"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xu1-N6-WsW">
+                                <rect key="frame" x="0.0" y="0.0" width="126" height="93"/>
+                                <connections>
+                                    <action selector="btnAction:" destination="gTV-IL-0wX" eventType="touchUpInside" id="xo7-Dq-7Lf"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vOH-YZ-FR7">
+                                <rect key="frame" x="111" y="-5" width="20" height="20"/>
+                                <color key="backgroundColor" red="0.81845489090000001" green="1" blue="0.18042979340000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="UTW-e3-NTD"/>
+                                    <constraint firstAttribute="width" constant="20" id="ljP-0G-N5p"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="btnAction:" destination="gTV-IL-0wX" eventType="touchUpInside" id="5jY-eX-DZm"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <button opaque="NO" tag="90" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4bk-eN-F6T">
-                        <rect key="frame" x="0.0" y="0.0" width="67.5" height="30"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <connections>
-                            <action selector="btnAction:" destination="gTV-IL-0wX" eventType="touchUpInside" id="V0y-sw-anc"/>
-                        </connections>
-                    </button>
-                    <button opaque="NO" tag="91" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fNH-eh-Ipj">
-                        <rect key="frame" x="52.5" y="-5" width="20" height="20"/>
-                        <color key="backgroundColor" red="0.81845489090000001" green="1" blue="0.18042979340000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="20" id="AEO-sV-TEe"/>
-                            <constraint firstAttribute="height" constant="20" id="qgJ-hT-qVe"/>
+                            <constraint firstAttribute="trailing" secondItem="vOH-YZ-FR7" secondAttribute="trailing" constant="-5" id="3Z0-CG-GMv"/>
+                            <constraint firstAttribute="trailing" secondItem="Yz8-4K-AOJ" secondAttribute="trailing" id="471-e9-Rab"/>
+                            <constraint firstItem="Yz8-4K-AOJ" firstAttribute="top" secondItem="e7m-eE-NzS" secondAttribute="top" id="FxK-hK-yZP"/>
+                            <constraint firstItem="Yz8-4K-AOJ" firstAttribute="leading" secondItem="e7m-eE-NzS" secondAttribute="leading" id="JhI-eN-LbB"/>
+                            <constraint firstAttribute="bottom" secondItem="Xu1-N6-WsW" secondAttribute="bottom" id="Nyr-49-gtj"/>
+                            <constraint firstAttribute="bottom" secondItem="Yz8-4K-AOJ" secondAttribute="bottom" id="PsE-PJ-CmK"/>
+                            <constraint firstItem="Xu1-N6-WsW" firstAttribute="top" secondItem="e7m-eE-NzS" secondAttribute="top" id="XhI-57-ANS"/>
+                            <constraint firstItem="vOH-YZ-FR7" firstAttribute="top" secondItem="e7m-eE-NzS" secondAttribute="top" constant="-5" id="g8T-2a-zSl"/>
+                            <constraint firstItem="Xu1-N6-WsW" firstAttribute="leading" secondItem="e7m-eE-NzS" secondAttribute="leading" id="m6x-DA-6I5"/>
+                            <constraint firstAttribute="trailing" secondItem="Xu1-N6-WsW" secondAttribute="trailing" id="u6B-Ss-5il"/>
                         </constraints>
-                        <connections>
-                            <action selector="btnAction:" destination="gTV-IL-0wX" eventType="touchUpInside" id="MUv-M9-Dio"/>
-                        </connections>
-                    </button>
+                    </view>
                 </subviews>
             </view>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="fNH-eh-Ipj" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="-5" id="5Bj-o9-sbX"/>
-                <constraint firstItem="0RV-kc-WYb" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="5gx-NY-Ioy"/>
-                <constraint firstItem="0RV-kc-WYb" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="9IE-14-rAz"/>
-                <constraint firstAttribute="trailing" secondItem="4bk-eN-F6T" secondAttribute="trailing" id="PFq-dK-H7y"/>
-                <constraint firstAttribute="bottom" secondItem="4bk-eN-F6T" secondAttribute="bottom" id="Uma-oO-Cs7"/>
-                <constraint firstAttribute="bottom" secondItem="0RV-kc-WYb" secondAttribute="bottom" id="iDM-Go-yLf"/>
-                <constraint firstAttribute="trailing" secondItem="0RV-kc-WYb" secondAttribute="trailing" id="k2W-se-81t"/>
-                <constraint firstItem="4bk-eN-F6T" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="nBX-va-Str"/>
-                <constraint firstAttribute="trailing" secondItem="fNH-eh-Ipj" secondAttribute="trailing" constant="-5" id="oWE-TN-J7H"/>
-                <constraint firstItem="4bk-eN-F6T" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="pgR-lb-LNK"/>
+                <constraint firstItem="e7m-eE-NzS" firstAttribute="height" secondItem="gTV-IL-0wX" secondAttribute="height" id="Ko1-gm-gwP"/>
+                <constraint firstItem="e7m-eE-NzS" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="O2Z-KY-rDI"/>
+                <constraint firstItem="e7m-eE-NzS" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="SVl-VQ-1oo"/>
+                <constraint firstItem="e7m-eE-NzS" firstAttribute="width" secondItem="gTV-IL-0wX" secondAttribute="width" id="YtY-YM-PVS"/>
             </constraints>
-            <size key="customSize" width="70" height="28"/>
+            <size key="customSize" width="129" height="91"/>
             <connections>
-                <outlet property="addBtn" destination="4bk-eN-F6T" id="4MB-Hf-Isc"/>
-                <outlet property="deleteBtn" destination="fNH-eh-Ipj" id="MSX-1s-Lai"/>
-                <outlet property="label" destination="0RV-kc-WYb" id="OUE-Kp-ac4"/>
+                <outlet property="addBtn" destination="Xu1-N6-WsW" id="A7d-Ye-vBR"/>
+                <outlet property="backView" destination="e7m-eE-NzS" id="3VZ-13-Km8"/>
+                <outlet property="deleteBtn" destination="vOH-YZ-FR7" id="OHW-Zm-Op8"/>
+                <outlet property="label" destination="Yz8-4K-AOJ" id="zMO-mA-nba"/>
             </connections>
-            <point key="canvasLocation" x="-221" y="-7"/>
+            <point key="canvasLocation" x="-255" y="-5.5"/>
         </collectionViewCell>
     </objects>
 </document>
