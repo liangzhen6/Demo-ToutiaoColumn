@@ -34,11 +34,12 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vOH-YZ-FR7">
                                 <rect key="frame" x="111" y="-5" width="20" height="20"/>
-                                <color key="backgroundColor" red="0.81845489090000001" green="1" blue="0.18042979340000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="UTW-e3-NTD"/>
                                     <constraint firstAttribute="width" constant="20" id="ljP-0G-N5p"/>
                                 </constraints>
+                                <state key="normal" backgroundImage="news_delete"/>
                                 <connections>
                                     <action selector="btnAction:" destination="gTV-IL-0wX" eventType="touchUpInside" id="5jY-eX-DZm"/>
                                 </connections>
@@ -77,4 +78,7 @@
             <point key="canvasLocation" x="-255" y="-5.5"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="news_delete" width="10" height="10"/>
+    </resources>
 </document>
