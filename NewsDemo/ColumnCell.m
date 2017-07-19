@@ -54,7 +54,6 @@
     
 }
 
-
 - (IBAction)btnAction:(UIButton *)sender {
     
     if (self.block) {

@@ -143,8 +143,6 @@ static NSString *const headerId = @"SectionHeaderView";
     
     [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
     
-    NSLog(@"%@",_dataScore);
-
 }
 
 
@@ -188,7 +186,6 @@ static NSString *const headerId = @"SectionHeaderView";
     ColumnModel * model = selectModel;
     NSInteger index = [self.dataScore[1] indexOfObject:model];
     NSIndexPath * selectIndexPath = [NSIndexPath indexPathForItem:index inSection:1];
-    //                    NSLog(@"shabima%@",myIndexpath);
     if (self.isEdit) {
         model.state = itemStateEdit;
     }else{
@@ -223,16 +220,17 @@ static NSString *const headerId = @"SectionHeaderView";
 #pragma mark ----------UICollectionViewDelegateFlowLayout-------------------
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    if (section==0) {//第一段隐藏段头
-        return CGSizeZero;
-    }else{
-        return CGSizeMake([UIScreen mainScreen].bounds.size.width, 30);
-    }
-
+    
+    return CGSizeMake([UIScreen mainScreen].bounds.size.width, 30);
+    
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath{
-    return YES;
+    if (indexPath.section == 0 && indexPath.item != 0) {
+        return YES;
+    }else{
+        return NO;
+    }
 }
 
 
