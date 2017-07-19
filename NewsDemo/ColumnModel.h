@@ -12,7 +12,6 @@ typedef NS_ENUM(NSUInteger, itemState) {
     itemStateNormol = 0,
     itemStateEdit,
     itemStateRemove,
-    itemStateSelect,
 };
 
 @interface ColumnModel : NSObject

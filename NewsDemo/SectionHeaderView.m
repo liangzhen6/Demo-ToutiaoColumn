@@ -21,9 +21,6 @@
 //    self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 30);
     self.label.text = @"点击添加更多栏目";
     
-    if (self.headerBlock) {
-        self.headerBlock(CGRectGetMaxY(self.frame));
-    }
     
 }
 
