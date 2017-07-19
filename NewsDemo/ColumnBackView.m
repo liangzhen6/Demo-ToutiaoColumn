@@ -132,9 +132,9 @@ static NSString *const headerId = @"SectionHeaderView";
             if (selectIndexPath) {
                 [self.collectionView endInteractiveMovement];//停止移动
 
-                if (point.y>self.maxY) {//如果用户把选中的栏目拖到删除栏目的那一块区域
-                    [self handleEndMoveSelectIndex:selectIndexPath movetoIndex:self.selectPath];
-                }
+//                if (point.y>self.maxY) {//如果用户把选中的栏目拖到删除栏目的那一块区域
+//                    [self handleEndMoveSelectIndex:selectIndexPath movetoIndex:self.selectPath];
+//                }
 
                 selectIndexPath = nil;
             }
