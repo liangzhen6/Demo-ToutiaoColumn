@@ -21,6 +21,6 @@ typedef void(^actionBlock)(ColumnModel *model);
 
 @property(nonatomic,copy)actionBlock block;
 
-- (void)updateState:(BOOL)isSelect;
+//- (void)updateState:(BOOL)isSelect;
 
 @end
