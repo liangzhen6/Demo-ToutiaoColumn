@@ -16,16 +16,24 @@
     // Initialization code
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.imageBackView.layer.cornerRadius = 5.0f;
+    self.imageBackView.layer.borderWidth = 1.0f;
+    self.imageBackView.layer.borderColor = [UIColor blackColor].CGColor;
+
+}
 
 - (void)setModel:(ColumnModel *)model {
     _model = model;
     self.label.text = model.title;
+    self.iconImage.image = [UIImage imageNamed:model.imageName];
     switch (model.state) {
         case 0:
         {//正常状态下
             self.deleteBtn.hidden = YES;
             self.addBtn.hidden = YES;
-            self.backView.backgroundColor = [UIColor orangeColor];
+//            self.backView.backgroundColor = [UIColor orangeColor];
 
         }
             break;
@@ -33,7 +41,7 @@
         {//编辑状态
             self.deleteBtn.hidden = NO;
             self.addBtn.hidden = YES;
-            self.backView.backgroundColor = [UIColor orangeColor];
+//            self.backView.backgroundColor = [UIColor orangeColor];
 
 
         }
@@ -42,7 +50,7 @@
         {//移除状态下
             self.deleteBtn.hidden = YES;
             self.addBtn.hidden = NO;
-            self.backView.backgroundColor = [UIColor grayColor];
+//            self.backView.backgroundColor = [UIColor grayColor];
 
         }
             break;
@@ -55,26 +63,13 @@
 }
 
 - (IBAction)btnAction:(UIButton *)sender {
-    
-    if (self.block) {
-        self.block(self.model);
+    if (!sender.hidden) {
+        if (self.block) {
+            self.block(self.model);
+        }
     }
-    
-    
 }
 
 
-//-(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-//    UIView *view = [super hitTest:point withEvent:event];
-//    if (view == nil) {
-//        for (UIView *subView in self.subviews) {
-//            CGPoint myPoint = [subView convertPoint:point fromView:self];
-//            if (CGRectContainsPoint(subView.bounds, myPoint)) {
-//                return subView;
-//            }
-//        }
-//    }
-//    return view;
-//}
 
 @end

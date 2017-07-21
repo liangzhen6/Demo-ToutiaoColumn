@@ -18,7 +18,8 @@ typedef NS_ENUM(NSUInteger, itemState) {
 
 @property(nonatomic,copy)NSString * title;
 @property(nonatomic,assign)itemState state;
+@property(nonatomic,copy)NSString * imageName;
 
-+ (instancetype)columnModelTitle:(NSString *)title state:(itemState)state;
++ (instancetype)columnModelTitle:(NSString *)title state:(itemState)state iconImage:(NSString *)imageName;
 
 @end

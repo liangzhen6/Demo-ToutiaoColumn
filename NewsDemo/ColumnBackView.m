@@ -12,8 +12,9 @@
 #import "ColumnModel.h"
 
 
-@interface ColumnBackView ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface ColumnBackView ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *collectionViewLayout;
 @property(nonatomic,strong)NSMutableArray * dataScore;
 
 @property(nonatomic,assign)CGPoint locationPoint;
@@ -36,12 +37,25 @@ static NSString *const headerId = @"SectionHeaderView";
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    CGRect frame = [UIScreen mainScreen].bounds;
-    self.frame = CGRectMake(0, 60, frame.size.width, frame.size.height-60);
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongPressed:)];
     [self.collectionView addGestureRecognizer:longPress];
-    
+    CGFloat WIDTH = [UIScreen mainScreen].bounds.size.width;
+    CGFloat minSpace = 0;
+    CGFloat itemWidth = 0;
+    if (WIDTH > 413) {//大屏幕
+        itemWidth = 80;
+    }else if (WIDTH > 374){//中等屏幕
+        itemWidth = 70;
+    }else{//小屏幕
+        itemWidth = 60;
+    }
+    minSpace = (WIDTH - itemWidth * 4 -30)/3;
+
+    self.collectionViewLayout.minimumLineSpacing = minSpace - 10;
+    self.collectionViewLayout.minimumInteritemSpacing = minSpace;
+    self.collectionViewLayout.itemSize = CGSizeMake(itemWidth, itemWidth + 20);
+    self.collectionViewLayout.headerReferenceSize = CGSizeMake(WIDTH, 30);
     
     UINib * cellNib = [UINib nibWithNibName:NSStringFromClass([ColumnCell class]) bundle:nil];
     [self.collectionView registerNib:cellNib forCellWithReuseIdentifier:cellId];
@@ -58,12 +72,12 @@ static NSString *const headerId = @"SectionHeaderView";
         [_dataScore addObject:arr1];
         NSMutableArray * arr2 = [[NSMutableArray alloc] init];
         [_dataScore addObject:arr2];
-        for (NSInteger i = 0; i < 40; i++) {
-            ColumnModel * model = [ColumnModel columnModelTitle:[NSString stringWithFormat:@"%ld",(long)i] state:itemStateNormol];
+        for (NSInteger i = 0; i < 13; i++) {
+            ColumnModel * model = [ColumnModel columnModelTitle:[NSString stringWithFormat:@"%ld",(long)i] state:itemStateNormol iconImage:@"icon"];
             [arr1 addObject:model];
         }
-        for (NSInteger i = 0; i < 40; i++) {
-            ColumnModel * model = [ColumnModel columnModelTitle:[NSString stringWithFormat:@"%ld",(long)i] state:itemStateRemove];
+        for (NSInteger i = 0; i < 13; i++) {
+            ColumnModel * model = [ColumnModel columnModelTitle:[NSString stringWithFormat:@"%ld",(long)i] state:itemStateRemove iconImage:@"icon"];
             [arr2 addObject:model];
         }
     }
@@ -211,19 +225,10 @@ static NSString *const headerId = @"SectionHeaderView";
     
     [self.dataScore[0] removeObjectAtIndex:selectIndexPath.item];
     [self.dataScore[1] insertObject:model atIndex:0];
-    
-    
     [self.collectionView moveItemAtIndexPath:selectIndexPath toIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
-
 }
 
-#pragma mark ----------UICollectionViewDelegateFlowLayout-------------------
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    
-    return CGSizeMake([UIScreen mainScreen].bounds.size.width, 30);
-    
-}
+#pragma mark ----------UICollectionViewDelegate的移动的一些代理-----------------
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0 && indexPath.item != 0) {

@@ -10,11 +10,11 @@
 
 @implementation ColumnModel
 
-+ (instancetype)columnModelTitle:(NSString *)title state:(itemState)state {
++ (instancetype)columnModelTitle:(NSString *)title state:(itemState)state iconImage:(NSString *)imageName{
     ColumnModel * model = [[ColumnModel alloc] init];
     model.title = title;
     model.state = state;
-    
+    model.imageName = imageName;
     return model;
 }
 

@@ -20,37 +20,67 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YrJ-Mq-RxS">
-                                <rect key="frame" x="305" y="20" width="60" height="30"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cgL-5a-xMv">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BNh-uS-9m6">
+                                        <rect key="frame" x="315" y="25" width="40" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="ggX-lF-5KX"/>
+                                            <constraint firstAttribute="width" constant="40" id="x2G-Qb-k2Q"/>
+                                        </constraints>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <state key="normal" backgroundImage="add"/>
+                                        <connections>
+                                            <action selector="addBtnAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6Je-Ek-m1T"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YrJ-Mq-RxS">
+                                        <rect key="frame" x="215" y="30" width="60" height="30"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="JLy-ey-Ayi"/>
+                                            <constraint firstAttribute="height" constant="30" id="vUX-NW-9L3"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="编辑">
+                                            <color key="titleColor" red="0.86783808409999996" green="0.45791683659999999" blue="0.17211640689999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <state key="selected" title="完成"/>
+                                        <state key="highlighted">
+                                            <color key="titleColor" red="0.86783808409999996" green="0.45791683659999999" blue="0.17211640689999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="self.layer.cornerRadius">
+                                                <integer key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="self.layer.borderColor">
+                                                <color key="value" red="0.96901541948318481" green="0.43140691518783569" blue="0.052424885332584381" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="self.layer.borderWidth">
+                                                <integer key="value" value="2"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="btnAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mua-uR-4lL"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="60" id="49P-PC-Xt1"/>
-                                    <constraint firstAttribute="height" constant="30" id="YE3-7y-U3R"/>
+                                    <constraint firstAttribute="trailing" secondItem="BNh-uS-9m6" secondAttribute="trailing" constant="20" id="5hq-Iw-ubb"/>
+                                    <constraint firstItem="BNh-uS-9m6" firstAttribute="leading" secondItem="YrJ-Mq-RxS" secondAttribute="trailing" constant="40" id="IfF-yd-GMb"/>
+                                    <constraint firstItem="BNh-uS-9m6" firstAttribute="top" secondItem="cgL-5a-xMv" secondAttribute="top" constant="25" id="bCx-Rk-HKs"/>
+                                    <constraint firstAttribute="height" constant="80" id="cSR-ur-O5A"/>
+                                    <constraint firstItem="YrJ-Mq-RxS" firstAttribute="top" secondItem="cgL-5a-xMv" secondAttribute="top" constant="30" id="w5f-Iz-NNf"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="编辑">
-                                    <color key="titleColor" red="0.86783808409999996" green="0.45791683659999999" blue="0.17211640689999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <state key="selected" title="完成"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="self.layer.cornerRadius">
-                                        <integer key="value" value="15"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="self.layer.borderColor">
-                                        <color key="value" red="0.96901541948318481" green="0.43140691518783569" blue="0.052424885332584381" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="self.layer.borderWidth">
-                                        <integer key="value" value="2"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="btnAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mua-uR-4lL"/>
-                                </connections>
-                            </button>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="YrJ-Mq-RxS" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="OVD-Tv-uTg"/>
-                            <constraint firstAttribute="trailing" secondItem="YrJ-Mq-RxS" secondAttribute="trailing" constant="10" id="OaA-ya-Vm1"/>
+                            <constraint firstItem="cgL-5a-xMv" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="1Op-p4-5Hw"/>
+                            <constraint firstItem="cgL-5a-xMv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="7hu-tr-Gea"/>
+                            <constraint firstAttribute="trailing" secondItem="cgL-5a-xMv" secondAttribute="trailing" id="Z5M-b8-fop"/>
                         </constraints>
                     </view>
                     <connections>
@@ -59,7 +89,27 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-457" y="89"/>
+            <point key="canvasLocation" x="-817" y="84"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="BSG-zD-MDh">
+            <objects>
+                <viewController id="HcG-au-VNE" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="5wy-4O-mTd"/>
+                        <viewControllerLayoutGuide type="bottom" id="GLH-9e-qv4"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1yn-Xa-mcu">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OAQ-d5-xdo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
         </scene>
     </scenes>
+    <resources>
+        <image name="add" width="100" height="100"/>
+    </resources>
 </document>

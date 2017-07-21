@@ -18,6 +18,8 @@ typedef void(^actionBlock)(ColumnModel *model);
 @property(nonatomic,strong)ColumnModel * model;
 @property (weak, nonatomic) IBOutlet UIButton *deleteBtn;
 @property (weak, nonatomic) IBOutlet UIButton *addBtn;
+@property (weak, nonatomic) IBOutlet UIView *imageBackView;
+@property (weak, nonatomic) IBOutlet UIImageView *iconImage;
 
 @property(nonatomic,copy)actionBlock block;
 
