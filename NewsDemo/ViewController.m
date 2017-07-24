@@ -28,7 +28,7 @@
     ColumnBackView * back = [ColumnBackView columnBackView];
     back.dataSource = self.dataSource;
     CGRect frame = [UIScreen mainScreen].bounds;
-    CGFloat height = [UIScreen mainScreen].bounds.size.height - 60;
+    CGFloat height = [UIScreen mainScreen].bounds.size.height - 80;
     back.frame = CGRectMake(0, 80 - height, frame.size.width, height);
     
     
