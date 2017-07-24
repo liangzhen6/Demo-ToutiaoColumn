@@ -15,11 +15,12 @@
 @interface ColumnBackView ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *collectionViewLayout;
-@property(nonatomic,strong)NSMutableArray * dataScore;
 
 @property(nonatomic,assign)CGPoint locationPoint;
 @property(nonatomic,assign)CGFloat maxY;
 @property(nonatomic,getter=isEdit)BOOL edit;
+
+@property(nonatomic,strong)NSMutableArray * dataSourceCopy;
 
 @end
 
@@ -65,25 +66,20 @@ static NSString *const headerId = @"SectionHeaderView";
 
 }
 
-- (NSMutableArray *)dataScore {
-    if (_dataScore == nil) {
-        _dataScore = [[NSMutableArray alloc] init];
-        NSMutableArray * arr1 = [[NSMutableArray alloc] init];
-        [_dataScore addObject:arr1];
-        NSMutableArray * arr2 = [[NSMutableArray alloc] init];
-        [_dataScore addObject:arr2];
-        for (NSInteger i = 0; i < 13; i++) {
-            ColumnModel * model = [ColumnModel columnModelTitle:[NSString stringWithFormat:@"%ld",(long)i] state:itemStateNormol iconImage:@"icon"];
-            [arr1 addObject:model];
-        }
-        for (NSInteger i = 0; i < 13; i++) {
-            ColumnModel * model = [ColumnModel columnModelTitle:[NSString stringWithFormat:@"%ld",(long)i] state:itemStateRemove iconImage:@"icon"];
-            [arr2 addObject:model];
-        }
-    }
-    return _dataScore;
+
+- (void)setDataSource:(NSMutableArray *)dataSource {
+    _dataSource = dataSource;
+
+    self.dataSourceCopy = dataSource;
+    
 }
 
+- (void)setDataSourceCopy:(NSMutableArray *)dataSourceCopy {
+    _dataSourceCopy = [[NSMutableArray alloc] init];
+    for (NSMutableArray * arr in dataSourceCopy) {
+        [_dataSourceCopy addObject:[arr mutableCopy]];
+    }
+}
 
 /**
  长按触发的事件
@@ -147,7 +143,7 @@ static NSString *const headerId = @"SectionHeaderView";
 
 - (void)changeEditState:(BOOL)isEdit {
     self.edit = isEdit;
-    for (ColumnModel * model in self.dataScore[0]) {
+    for (ColumnModel * model in self.dataSource[0]) {
         if (isEdit) {
             model.state = itemStateEdit;//所有model变成编辑状态
         }else{
@@ -159,21 +155,35 @@ static NSString *const headerId = @"SectionHeaderView";
     
 }
 
+- (void)updateColumn:(updateColumnBlock)updateBlock {
+    if ([self checkColumnChange]) {//检查是否有更改
+        self.dataSourceCopy = _dataSource;
+        updateBlock(_dataSource);
+    }
+}
+- (BOOL)checkColumnChange {
+    for (NSInteger i = 0; i < _dataSource.count; i++) {
+        if (![_dataSource[i] isEqualToArray:_dataSourceCopy[i]]) {
+            return YES;
+        }
+    }
+    return NO;
+}
 
 #pragma mark -----UIcollectionDelegate----------
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
-    return self.dataScore.count;
+    return self.dataSource.count;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return [self.dataScore[section] count];
+    return [self.dataSource[section] count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ColumnCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:indexPath];
 
-    cell.model = self.dataScore[indexPath.section][indexPath.item];
+    cell.model = self.dataSource[indexPath.section][indexPath.item];
     if (indexPath.section == 0 && indexPath.item == 0) {
         cell.deleteBtn.hidden = YES;
         cell.addBtn.hidden = YES;
@@ -184,6 +194,7 @@ static NSString *const headerId = @"SectionHeaderView";
     }];
     return cell;
 }
+
 
 - (void)handleCellAction:(ColumnModel *)model {
     if (model.state == itemStateEdit) {
@@ -198,7 +209,7 @@ static NSString *const headerId = @"SectionHeaderView";
 
 - (void)handelAddItemSelectIndex:(ColumnModel *)selectModel {
     ColumnModel * model = selectModel;
-    NSInteger index = [self.dataScore[1] indexOfObject:model];
+    NSInteger index = [self.dataSource[1] indexOfObject:model];
     NSIndexPath * selectIndexPath = [NSIndexPath indexPathForItem:index inSection:1];
     if (self.isEdit) {
         model.state = itemStateEdit;
@@ -208,14 +219,14 @@ static NSString *const headerId = @"SectionHeaderView";
     
     [self.collectionView reloadItemsAtIndexPaths:@[selectIndexPath]];
     
-    [self.dataScore[1] removeObjectAtIndex:selectIndexPath.item];
-    [self.dataScore[0] addObject:model];
-    [self.collectionView moveItemAtIndexPath:selectIndexPath toIndexPath:[NSIndexPath indexPathForItem:[self.dataScore[0] count]-1 inSection:0]];
+    [self.dataSource[1] removeObjectAtIndex:selectIndexPath.item];
+    [self.dataSource[0] addObject:model];
+    [self.collectionView moveItemAtIndexPath:selectIndexPath toIndexPath:[NSIndexPath indexPathForItem:[self.dataSource[0] count]-1 inSection:0]];
 }
 
 - (void)handleDeleteItemSelectIndex:(ColumnModel *)selectModel {
     ColumnModel * model = selectModel;
-    NSInteger index = [self.dataScore[0] indexOfObject:model];
+    NSInteger index = [self.dataSource[0] indexOfObject:model];
     NSIndexPath * selectIndexPath = [NSIndexPath indexPathForItem:index inSection:0];
     
     model.state = itemStateRemove;
@@ -223,8 +234,8 @@ static NSString *const headerId = @"SectionHeaderView";
     [self.collectionView reloadItemsAtIndexPaths:@[selectIndexPath]];//先刷新状态再移动。
     
     
-    [self.dataScore[0] removeObjectAtIndex:selectIndexPath.item];
-    [self.dataScore[1] insertObject:model atIndex:0];
+    [self.dataSource[0] removeObjectAtIndex:selectIndexPath.item];
+    [self.dataSource[1] insertObject:model atIndex:0];
     [self.collectionView moveItemAtIndexPath:selectIndexPath toIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
 }
 
@@ -255,6 +266,13 @@ static NSString *const headerId = @"SectionHeaderView";
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         //是段头
         SectionHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:headerId forIndexPath:indexPath];
+        if (indexPath.section == 0) {
+            //第0行
+            [headerView setTitle:@"我的频道" subtitle:@"长按拖动排序"];
+        }else{
+            //第1行
+            [headerView setTitle:@"频道推介" subtitle:@"点击添加频道"];
+        }
             return  headerView;
     }
     return nil;
@@ -262,9 +280,9 @@ static NSString *const headerId = @"SectionHeaderView";
 
 - (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
     
-    ColumnModel * change = self.dataScore[sourceIndexPath.section][sourceIndexPath.item];
-    [self.dataScore[sourceIndexPath.section] removeObjectAtIndex:sourceIndexPath.item];
-    [self.dataScore[destinationIndexPath.section] insertObject:change atIndex:destinationIndexPath.item];
+    ColumnModel * change = self.dataSource[sourceIndexPath.section][sourceIndexPath.item];
+    [self.dataSource[sourceIndexPath.section] removeObjectAtIndex:sourceIndexPath.item];
+    [self.dataSource[destinationIndexPath.section] insertObject:change atIndex:destinationIndexPath.item];
     
     if (destinationIndexPath.section == 1) {
         change.state = itemStateRemove;

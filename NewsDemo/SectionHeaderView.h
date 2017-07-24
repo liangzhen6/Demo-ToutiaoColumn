@@ -9,5 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface SectionHeaderView : UICollectionReusableView
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;
+
+- (void)setTitle:(NSString *)title subtitle:(NSString *)subTitle;
 
 @end

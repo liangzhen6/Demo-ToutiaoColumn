@@ -11,14 +11,15 @@
 typedef NS_ENUM(NSUInteger, itemState) {
     itemStateNormol = 0,
     itemStateEdit,
-    itemStateRemove,
+    itemStateRemove
 };
 
-@interface ColumnModel : NSObject
+@interface ColumnModel : NSObject<NSCoding,NSCopying>
 
 @property(nonatomic,copy)NSString * title;
 @property(nonatomic,assign)itemState state;
 @property(nonatomic,copy)NSString * imageName;
+@property(nonatomic,copy)NSString * columnUrl;
 
 + (instancetype)columnModelTitle:(NSString *)title state:(itemState)state iconImage:(NSString *)imageName;
 

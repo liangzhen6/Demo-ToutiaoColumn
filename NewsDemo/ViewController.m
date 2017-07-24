@@ -8,10 +8,15 @@
 
 #import "ViewController.h"
 #import "ColumnBackView.h"
+#import "ColumnModel.h"
+
 
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *editBtn;
 @property(nonatomic,strong)ColumnBackView *backView;
+
+@property(nonatomic,strong)NSMutableArray * dataSource;
+
 @end
 
 @implementation ViewController
@@ -21,6 +26,7 @@
 //    self.view.backgroundColor = [UIColor lightTextColor];
 
     ColumnBackView * back = [ColumnBackView columnBackView];
+    back.dataSource = self.dataSource;
     CGRect frame = [UIScreen mainScreen].bounds;
     CGFloat height = [UIScreen mainScreen].bounds.size.height - 60;
     back.frame = CGRectMake(0, 80 - height, frame.size.width, height);
@@ -57,11 +63,14 @@
             self.backView.frame = frame;
         }];
     }else{
-            if (self.editBtn.selected) {
-                self.editBtn.selected = NO;
-                [self.backView changeEditState:NO];
-            }
-            [UIView animateWithDuration:0.3 animations:^{
+        if (self.editBtn.selected) {
+            self.editBtn.selected = NO;
+            [self.backView changeEditState:NO];
+        }
+        [self.backView updateColumn:^(NSMutableArray *columnArray) {
+            NSLog(@"%@",columnArray);
+        }];
+        [UIView animateWithDuration:0.3 animations:^{
             self.editBtn.alpha = 0;
             sender.transform =  CGAffineTransformMakeRotation(0);
             CGRect frame = self.backView.frame;
@@ -70,6 +79,26 @@
         }];
     }
     
+}
+
+- (NSMutableArray *)dataSource {
+    if (_dataSource == nil) {
+        _dataSource = [[NSMutableArray alloc] init];
+        NSMutableArray * arr1 = [[NSMutableArray alloc] init];
+        [_dataSource addObject:arr1];
+        NSMutableArray * arr2 = [[NSMutableArray alloc] init];
+        [_dataSource addObject:arr2];
+        for (NSInteger i = 0; i < 13; i++) {
+            ColumnModel * model = [ColumnModel columnModelTitle:[NSString stringWithFormat:@"%ld",(long)i] state:itemStateNormol iconImage:@"icon"];
+            [arr1 addObject:model];
+        }
+        for (NSInteger i = 0; i < 13; i++) {
+            ColumnModel * model = [ColumnModel columnModelTitle:[NSString stringWithFormat:@"%ld",(long)i] state:itemStateRemove iconImage:@"icon"];
+            [arr2 addObject:model];
+        }
+      
+    }
+    return _dataSource;
 }
 
 - (void)didReceiveMemoryWarning {

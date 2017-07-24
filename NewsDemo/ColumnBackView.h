@@ -7,15 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
-
-typedef void(^editBlack)(BOOL isEdit);
+@class ColumnModel;
+typedef void(^editBlock)(BOOL isEdit);
+typedef void(^updateColumnBlock)(NSMutableArray * columnArray);
 
 @interface ColumnBackView : UIView
+@property(nonatomic,strong)NSMutableArray * dataSource;
 
-@property(nonatomic,copy)editBlack block;
+@property(nonatomic,copy)editBlock block;
 
 + (instancetype)columnBackView;
 
 - (void)changeEditState:(BOOL)isEdit;
+
+- (void)updateColumn:(updateColumnBlock)updateBlock;
 
 @end

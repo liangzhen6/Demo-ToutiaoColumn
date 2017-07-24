@@ -9,28 +9,15 @@
 #import "SectionHeaderView.h"
 
 @interface SectionHeaderView ()
-@property (weak, nonatomic) IBOutlet UILabel *label;
 
 @end
 
 @implementation SectionHeaderView
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    
-//    self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 30);
-    self.label.text = @"点击添加更多栏目";
-    
-    
-}
 
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (void)setTitle:(NSString *)title subtitle:(NSString *)subTitle {
+    self.titleLabel.text = title;
+    self.subTitleLabel.text = subTitle;
 }
-*/
 
 @end

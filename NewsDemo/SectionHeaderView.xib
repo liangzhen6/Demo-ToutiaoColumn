@@ -15,25 +15,37 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9sd-XN-8cD">
-                    <rect key="frame" x="10" y="0.0" width="365" height="55"/>
-                    <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
+                    <rect key="frame" x="10" y="0.0" width="80" height="55"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="80" id="tmG-rf-ABc"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LUi-1Q-Gn2">
+                    <rect key="frame" x="95" y="0.0" width="270" height="55"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <nil key="textColor"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="9sd-XN-8cD" secondAttribute="trailing" id="8iA-zj-WGX"/>
+                <constraint firstItem="LUi-1Q-Gn2" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="2qb-2E-qfL"/>
                 <constraint firstItem="9sd-XN-8cD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="9Lb-ve-6DB"/>
+                <constraint firstItem="LUi-1Q-Gn2" firstAttribute="leading" secondItem="9sd-XN-8cD" secondAttribute="trailing" constant="5" id="9gw-zV-9nw"/>
+                <constraint firstAttribute="bottom" secondItem="LUi-1Q-Gn2" secondAttribute="bottom" id="Ar5-a4-IgB"/>
                 <constraint firstAttribute="bottom" secondItem="9sd-XN-8cD" secondAttribute="bottom" id="EfP-wU-roC"/>
                 <constraint firstItem="9sd-XN-8cD" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="XtI-eO-9b2"/>
+                <constraint firstAttribute="trailing" secondItem="LUi-1Q-Gn2" secondAttribute="trailing" constant="10" id="t67-TL-D4U"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="label" destination="9sd-XN-8cD" id="wcN-IO-bBl"/>
+                <outlet property="subTitleLabel" destination="LUi-1Q-Gn2" id="3Ky-4p-uVA"/>
+                <outlet property="titleLabel" destination="9sd-XN-8cD" id="5oE-5I-d5f"/>
             </connections>
-            <point key="canvasLocation" x="-85" y="-414"/>
+            <point key="canvasLocation" x="-85.5" y="-414.5"/>
         </view>
     </objects>
 </document>
