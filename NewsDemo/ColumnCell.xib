@@ -103,6 +103,6 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="news_delete" width="10" height="10"/>
+        <image name="news_delete" width="20" height="20"/>
     </resources>
 </document>

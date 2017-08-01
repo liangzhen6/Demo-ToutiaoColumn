@@ -12,12 +12,11 @@
 #import "ColumnModel.h"
 
 
-@interface ColumnBackView ()<UICollectionViewDelegate,UICollectionViewDataSource>
+@interface ColumnBackView ()<UICollectionViewDelegate,UICollectionViewDataSource,UIGestureRecognizerDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *collectionViewLayout;
 
-@property(nonatomic,assign)CGPoint locationPoint;
-@property(nonatomic,assign)CGFloat maxY;
+@property(nonatomic,strong)UIPanGestureRecognizer * panGesture;
 @property(nonatomic,getter=isEdit)BOOL edit;
 
 @property(nonatomic,strong)NSMutableArray * dataSourceCopy;
@@ -38,9 +37,15 @@ static NSString *const headerId = @"SectionHeaderView";
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongPressed:)];
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(gestureAction:)];
     [self.collectionView addGestureRecognizer:longPress];
+    
+    UIPanGestureRecognizer * panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(gestureAction:)];
+    [self.collectionView addGestureRecognizer:panGesture];
+    panGesture.enabled = NO;//滑动手势关闭
+    panGesture.delegate = self;
+    self.panGesture = panGesture;
+    
     CGFloat WIDTH = [UIScreen mainScreen].bounds.size.width;
     CGFloat minSpace = 0;
     CGFloat itemWidth = 0;
@@ -57,6 +62,7 @@ static NSString *const headerId = @"SectionHeaderView";
     self.collectionViewLayout.minimumInteritemSpacing = minSpace;
     self.collectionViewLayout.itemSize = CGSizeMake(itemWidth, itemWidth + 20);
     self.collectionViewLayout.headerReferenceSize = CGSizeMake(WIDTH, 30);
+    self.collectionView.bounces = NO;//没有回弹效果，可以避免cell消失的bug
     
     UINib * cellNib = [UINib nibWithNibName:NSStringFromClass([ColumnCell class]) bundle:nil];
     [self.collectionView registerNib:cellNib forCellWithReuseIdentifier:cellId];
@@ -65,7 +71,6 @@ static NSString *const headerId = @"SectionHeaderView";
     [self.collectionView registerNib:headerNib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerId];
 
 }
-
 
 - (void)setDataSource:(NSMutableArray *)dataSource {
     _dataSource = dataSource;
@@ -82,9 +87,9 @@ static NSString *const headerId = @"SectionHeaderView";
 }
 
 /**
- 长按触发的事件
+ 手势触发的事件
  */
-- (void)onLongPressed:(UILongPressGestureRecognizer *)sender {
+- (void)gestureAction:(UIGestureRecognizer *)sender {
     static NSIndexPath * selectIndexPath = nil;//长按拖动的那个item
     static CGPoint offsetPoint;
     
@@ -100,9 +105,6 @@ static NSString *const headerId = @"SectionHeaderView";
     CGPoint point = [sender locationInView:sender.view];
     NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:point];
  
-
-    self.locationPoint = point;
-
     switch (sender.state) {
             
         case UIGestureRecognizerStateBegan: {
@@ -146,8 +148,10 @@ static NSString *const headerId = @"SectionHeaderView";
     for (ColumnModel * model in self.dataSource[0]) {
         if (isEdit) {
             model.state = itemStateEdit;//所有model变成编辑状态
+            self.panGesture.enabled = YES;//滑动手势开启
         }else{
             model.state = itemStateNormol;
+            self.panGesture.enabled = NO;//滑动手势关闭
         }
     }
     
@@ -170,6 +174,17 @@ static NSString *const headerId = @"SectionHeaderView";
     return NO;
 }
 
+#pragma mark -------------UIGestureRecognizerDelegate-----------------
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {//阻止一些非选中indexPathcell事件响应
+    CGPoint point = [touch locationInView:self.collectionView];
+    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:point];
+    if (indexPath.section == 0 && indexPath.item != 0) {
+        return YES;
+    }
+    return NO;
+}
+
+
 #pragma mark -----UIcollectionDelegate----------
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
@@ -182,7 +197,6 @@ static NSString *const headerId = @"SectionHeaderView";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ColumnCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:indexPath];
-
     cell.model = self.dataSource[indexPath.section][indexPath.item];
     if (indexPath.section == 0 && indexPath.item == 0) {
         cell.deleteBtn.hidden = YES;
