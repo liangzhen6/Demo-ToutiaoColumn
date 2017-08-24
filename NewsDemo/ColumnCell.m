@@ -40,7 +40,7 @@
         case 1:
         {//编辑状态
             self.deleteBtn.hidden = NO;
-            self.addBtn.hidden = YES;
+            self.addBtn.hidden = NO;
 //            self.backView.backgroundColor = [UIColor orangeColor];
 
 
